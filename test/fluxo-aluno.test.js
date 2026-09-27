@@ -17,7 +17,8 @@ describe('Fluxo completo do aluno (E2E)', () => {
     expect(tokenAdmin).to.be.a('string').and.not.empty;
   });
 
-  it('2. Deve cadastrar um novo aluno como administrador', async () => {
+  it('2. Deve cadastrar um novo aluno como administrador e matriculá-lo na disciplina', async () => {
+    // Cadastra o aluno
     const resposta = await request(app)
       .post('/api/admin/alunos')
       .set('Authorization', `Bearer ${tokenAdmin}`)
@@ -29,9 +30,17 @@ describe('Fluxo completo do aluno (E2E)', () => {
       });
 
     expect(resposta.status).to.be.oneOf([200, 201]);
-    expect(resposta.body).to.have.property('_id').or.to.have.property('id');
-    alunoId = resposta.body._id || resposta.body.id;
+    expect(resposta.body).to.have.property('id');
+    alunoId = resposta.body.id;
     expect(alunoId).to.be.a('string').and.not.empty;
+
+    // Matricula o aluno na disciplina (necessário para o registro de trabalho)
+    const respostaMatricula = await request(app)
+      .post(`/api/admin/disciplinas/${dados.disciplina.id}/matriculas`)
+      .set('Authorization', `Bearer ${tokenAdmin}`)
+      .send({ alunoId });
+
+    expect(respostaMatricula.status).to.be.oneOf([200, 201]);
   });
 
   it('3. Deve logar como o aluno recém-cadastrado', async () => {
