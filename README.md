@@ -269,7 +269,7 @@ curl -X POST http://localhost:3000/api/alunos/aluno-ana-souza/trabalhos \
 
 Esta seção descreve os testes automatizados de API desenvolvidos para a disciplina 07 - Automação de Testes na Camada de Serviço (API), utilizando **Mocha**, **SuperTest**, **Chai** e **Dotenv**, com execução automatizada via **GitHub Actions**.
 
-## 🎯 Objetivo
+## Objetivo
 
 Automatizar o fluxo completo de uso da API:
 
@@ -278,7 +278,7 @@ Automatizar o fluxo completo de uso da API:
 3. **Login como aluno cadastrado**
 4. **Registro da entrega de um trabalho**
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 | Ferramenta | Função |
 |------------|--------|
@@ -289,7 +289,7 @@ Automatizar o fluxo completo de uso da API:
 | **GitHub Actions** | Pipeline de CI (execução automática dos testes) |
 | **MongoDB 7** | Banco de dados (service do GitHub Actions na pipeline) |
 
-## 📁 Estrutura dos Testes
+## Estrutura dos Testes
 
 test/
 ├── data/
