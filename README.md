@@ -301,7 +301,7 @@ test/
 └── root-hooks.js # Hooks globais do Mocha
 
 
-## 🧩 Conceitos Aplicados
+## Conceitos Aplicados
 
 ### 1. Data-Driven Testing
 Os dados usados nos testes (credenciais, dados de aluno, disciplina, trabalho) estão no arquivo `test/data/dados.json`. Assim possibilita:
@@ -318,7 +318,7 @@ Credenciais e URLs são carregadas via `.env` (não versionado). Um arquivo `.en
 ### 4. Pipeline de CI no GitHub Actions
 O workflow `.github/workflows/tests.yml` executa os testes automaticamente a cada `push` ou `pull_request` na branch `main`, subindo um MongoDB 7 como service. Também permite execução manual (`workflow_dispatch`).
 
-## 🚀 Como Executar
+## Como Executar
 
 ### Pré-requisitos
 - Node.js 18+
@@ -373,7 +373,7 @@ O workflow:
 
 **Status:** Todos os testes passando na pipeline
 
-## 📌 Observações
+## Observações
 
 - A API exige que o aluno esteja **matriculado em uma disciplina** antes de registrar um trabalho. Por isso, o teste 2 também realiza a matrícula do aluno na disciplina de Matemática.
 - O `.env` **não é versionado** por conter credenciais. O arquivo `.env.example` serve como base.
