@@ -260,3 +260,121 @@ curl -X POST http://localhost:3000/api/alunos/aluno-ana-souza/trabalhos \
 
 > Novos registros criados via API recebem ids no formato UUID (gerados com
 > `crypto.randomUUID()`), diferente dos ids legíveis usados nos dados fake acima.
+
+
+
+---
+
+# Trabalho de Conclusão da Disciplina de Testes de Serviço
+
+Esta seção descreve os testes automatizados de API desenvolvidos para a disciplina 07 - Automação de Testes na Camada de Serviço (API), utilizando **Mocha**, **SuperTest**, **Chai** e **Dotenv**, com execução automatizada via **GitHub Actions**.
+
+## 🎯 Objetivo
+
+Automatizar o fluxo completo de uso da API:
+
+1. **Login como administrador**
+2. **Cadastro de um novo aluno** (e matrícula em disciplina)
+3. **Login como aluno cadastrado**
+4. **Registro da entrega de um trabalho**
+
+## 🛠️ Tecnologias Utilizadas
+
+| Ferramenta | Função |
+|------------|--------|
+| **Mocha** | Framework de testes (estrutura `describe`/`it`) |
+| **SuperTest** | Cliente HTTP para testar a API sem subir servidor manualmente |
+| **Chai** | Biblioteca de asserções (`expect`) |
+| **Dotenv** | Carregamento de variáveis de ambiente (`.env`) |
+| **GitHub Actions** | Pipeline de CI (execução automática dos testes) |
+| **MongoDB 7** | Banco de dados (service do GitHub Actions na pipeline) |
+
+## 📁 Estrutura dos Testes
+
+test/
+├── data/
+│ └── dados.json # Massa de dados (Data-Driven)
+├── helpers/
+│ └── auth.js # Helpers de login (Admin e Aluno)
+├── auth.test.js # Testes básicos de autenticação
+├── fluxo-aluno.test.js # Teste E2E do fluxo completo
+└── root-hooks.js # Hooks globais do Mocha
+
+
+## 🧩 Conceitos Aplicados
+
+### 1. Data-Driven Testing
+Os dados usados nos testes (credenciais, dados de aluno, disciplina, trabalho) estão no arquivo `test/data/dados.json`. Assim possibilita:
+- Fácil manutenção (alterar um dado em um só lugar)
+- Reutilização em múltiplos testes
+- Separação clara entre código e massa de dados
+
+### 2. Helpers de autenticação
+As funções `loginAdmin()` e `loginAluno()` em `test/helpers/auth.js` encapsulam a lógica de login e retornam o token JWT, evitando duplicação de código.
+
+### 3. Variáveis de Ambiente com Dotenv
+Credenciais e URLs são carregadas via `.env` (não versionado). Um arquivo `.env.example` serve de modelo.
+
+### 4. Pipeline de CI no GitHub Actions
+O workflow `.github/workflows/tests.yml` executa os testes automaticamente a cada `push` ou `pull_request` na branch `main`, subindo um MongoDB 7 como service. Também permite execução manual (`workflow_dispatch`).
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+- Node.js 18+
+- MongoDB rodando localmente (`mongodb://127.0.0.1:27017`)
+
+### Passos
+
+```bash
+# 1. Instalar dependências
+npm install
+
+# 2. Configurar variáveis de ambiente
+cp .env.example .env
+# editar o .env com suas credenciais
+
+# 3. Rodar os testes
+npm test
+
+### Resultado esperado
+
+```
+
+### Resultados esperados
+
+POST /api/auth/login
+    ✓ deve retornar 200 e um token quando o admin informar e-mail e senha corretos
+    ✓ deve retornar 401 quando a senha informada for inválida
+
+  Fluxo completo do aluno (E2E)
+    ✓ 1. Deve logar como administrador
+    ✓ 2. Deve cadastrar um novo aluno como administrador e matriculá-lo na disciplina
+    ✓ 3. Deve logar como o aluno recém-cadastrado
+    ✓ 4. Deve registrar a entrega de um trabalho como aluno
+
+  6 passing
+
+
+
+## Pipeline (GitHub Actions)
+
+A pipeline é disparada por:
+- **Push** na branch `main`
+- **Pull Request** para `main`
+- **Execução manual** (`workflow_dispatch`)
+
+O workflow:
+1. Faz checkout do código
+2. Configura Node.js 20
+3. Instala dependências (`npm ci`)
+4. Sobe MongoDB 7 como service
+5. Executa os testes (`npm test`)
+
+**Status:** Todos os testes passando na pipeline
+
+## 📌 Observações
+
+- A API exige que o aluno esteja **matriculado em uma disciplina** antes de registrar um trabalho. Por isso, o teste 2 também realiza a matrícula do aluno na disciplina de Matemática.
+- O `.env` **não é versionado** por conter credenciais. O arquivo `.env.example` serve como base.
+
